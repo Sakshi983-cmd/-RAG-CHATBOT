@@ -1,0 +1,37 @@
+# Environment variables - API keys yahan hoti hain, KABHI GitHub pe mat daalna
+.env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Vector DB saved files (ye bade hote hain)
+vectordb/*.index
+vectordb/*.pkl
+
+# Chunks (regenerate ho sakte hain)
+chunks/*.json
+chunks/*.pkl
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
