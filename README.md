@@ -79,79 +79,26 @@ class SakshiAIEngineer:
 
 ## 🏗️ Architecture
 
-<div align="center">
+## 🏗️ System Architecture (RAG Pipeline)
 
-<svg width="850" height="600" xmlns="http://www.w3.org/2000/svg">
+```mermaid
+graph LR
 
-  <!-- INDEXING PIPELINE -->
-  <text x="60" y="30" style="font-size:16px; font-weight:bold; fill:#22c55e">📄 INDEXING PIPELINE</text>
+A["📄 User Upload (PDF/TXT)"] --> B["🧹 Document Processor<br/>Clean + Chunk"]
+B --> C["🔢 Embeddings<br/>MiniLM (384-dim)"]
+C --> D["🗃️ FAISS Vector DB"]
 
-  <!-- PDF Input -->
-  <rect x="50" y="50" width="140" height="60" rx="6"
-        style="fill:#0f172a; stroke:#22c55e; stroke-width:2"/>
-  <text x="120" y="85" style="fill:#f1f5f9; font-size:12px" text-anchor="middle">PDF / TXT File</text>
+E["👤 User Query"] --> F["🔍 Retriever<br/>Top-K Search"]
+D --> F
 
-  <!-- Document Processor -->
-  <rect x="50" y="130" width="140" height="80" rx="6"
-        style="fill:#0f172a; stroke:#22c55e; stroke-width:2"/>
-  <text x="120" y="150" style="fill:#22c55e; font-size:12px; font-weight:bold" text-anchor="middle">document_processor.py</text>
-  <text x="120" y="170" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Clean & Split</text>
-  <text x="120" y="185" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">200w chunks</text>
+F --> G["🧠 Generator<br/>Prompt Builder"]
+G --> H["⚡ Groq API<br/>LLaMA 3"]
+H --> I["🎨 Streamlit UI<br/>Response"]
 
-  <!-- Embeddings -->
-  <rect x="50" y="230" width="140" height="80" rx="6"
-        style="fill:#0f172a; stroke:#22c55e; stroke-width:2"/>
-  <text x="120" y="250" style="fill:#22c55e; font-size:12px; font-weight:bold" text-anchor="middle">embeddings.py</text>
-  <text x="120" y="270" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">all-MiniLM-L6-v2</text>
-  <text x="120" y="285" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">384-dim vectors</text>
-
-  <!-- FAISS -->
-  <rect x="50" y="330" width="140" height="80" rx="6"
-        style="fill:#1e293b; stroke:#22c55e; stroke-width:2"/>
-  <text x="120" y="350" style="fill:#22c55e; font-size:12px; font-weight:bold" text-anchor="middle">FAISS Vector DB</text>
-  <text x="120" y="370" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">IndexFlatL2</text>
-  <text x="120" y="385" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Persisted</text>
-
-  <!-- QUERY PIPELINE -->
-  <text x="450" y="30" style="font-size:16px; font-weight:bold; fill:#f97316">👤 QUERY PIPELINE</text>
-
-  <!-- User Query -->
-  <rect x="420" y="50" width="140" height="60" rx="6"
-        style="fill:#0f172a; stroke:#f97316; stroke-width:2"/>
-  <text x="490" y="85" style="fill:#f1f5f9; font-size:12px" text-anchor="middle">User Query</text>
-
-  <!-- Retriever -->
-  <rect x="420" y="130" width="140" height="80" rx="6"
-        style="fill:#0f172a; stroke:#f97316; stroke-width:2"/>
-  <text x="490" y="150" style="fill:#f97316; font-size:12px; font-weight:bold" text-anchor="middle">retriever.py</text>
-  <text x="490" y="170" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Vector Search</text>
-  <text x="490" y="185" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Top-4 chunks</text>
-
-  <!-- Generator -->
-  <rect x="420" y="230" width="140" height="80" rx="6"
-        style="fill:#0f172a; stroke:#f97316; stroke-width:2"/>
-  <text x="490" y="250" style="fill:#f97316; font-size:12px; font-weight:bold" text-anchor="middle">generator.py</text>
-  <text x="490" y="270" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Build Prompt</text>
-  <text x="490" y="285" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Grounding Rules</text>
-
-  <!-- Groq API -->
-  <rect x="420" y="330" width="140" height="80" rx="6"
-        style="fill:#1e293b; stroke:#f97316; stroke-width:2"/>
-  <text x="490" y="350" style="fill:#f97316; font-size:12px; font-weight:bold" text-anchor="middle">Groq API</text>
-  <text x="490" y="370" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">llama-3.1-8b</text>
-  <text x="490" y="385" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Streaming</text>
-
-  <!-- Streamlit UI -->
-  <rect x="420" y="430" width="140" height="80" rx="6"
-        style="fill:#1e293b; stroke:#f97316; stroke-width:2"/>
-  <text x="490" y="450" style="fill:#f97316; font-size:12px; font-weight:bold" text-anchor="middle">Streamlit UI</text>
-  <text x="490" y="470" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Real-time Stream</text>
-  <text x="490" y="485" style="fill:#f1f5f9; font-size:10px" text-anchor="middle">Source Chunks</text>
-
-</svg>
-
-</div>
-
+style A fill:#e3f2fd
+style I fill:#c8e6c9
+style H fill:#fff3e0
+style D fill:#f3e5f5
 
 ## ✨ Features
 
