@@ -75,10 +75,6 @@ class SakshiAIEngineer:
 
 ---
 
-
-
-## 🏗️ Architecture
-
 ## 🏗️ System Architecture (RAG Pipeline)
 
 ```mermaid
