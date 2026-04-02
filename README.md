@@ -69,7 +69,7 @@ class SakshiAIEngineer:
 
 <div align="center">
 
-![DocMind AI](assets/screenshots/app_screenshot.png)
+![DocMind AI](assets/app_screenshot.png)
 
 </div>
 
