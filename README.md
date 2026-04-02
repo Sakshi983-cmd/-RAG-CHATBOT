@@ -95,8 +95,8 @@ style A fill:#e3f2fd
 style I fill:#c8e6c9
 style H fill:#fff3e0
 style D fill:#f3e5f5
+```
 
----
 ## ✨ Features
 
 | | Feature | Details |
@@ -113,7 +113,6 @@ style D fill:#f3e5f5
 | 🗑️ | **Clear Chat** | Full session reset anytime |
 
 ---
-
 ## 🛠️ Tech Stack
 
 <div align="center">
