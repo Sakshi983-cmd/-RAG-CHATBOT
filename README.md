@@ -81,65 +81,105 @@ class SakshiAIEngineer:
 
 <div align="center">
 
-```
-# INDEXING PIPELINE
-+ 📄  PDF / TXT File
-+ ┌───────────────────────┐
-+ │ document_processor.py │
-+ │  • Clean headers/footers
-+ │  • Normalize whitespace
-+ │  • Sentence-aware split → 200w chunks
-+ │  • 30w overlap for continuity
-+ └─────────────┬─────────┘
-+       │ chunks[]
-+       ▼
-+ ┌───────────────────────┐
-+ │ embeddings.py         │
-+ │  • all-MiniLM-L6-v2 (CPU-friendly)
-+ │  • 384-dim dense vectors
-+ └─────────────┬─────────┘
-+       │ numpy float32
-+       ▼
-+ ┌───────────────────────┐
-+ │ FAISS Vector DB       │
-+ │  • IndexFlatL2 search
-+ │  • Stored as .index + .pkl
-+ └───────────────────────┘
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #1e1e2e; stroke: #06b6d4; stroke-width: 2; }
+      .box-indexing { fill: #0f172a; stroke: #84cc16; stroke-width: 2; }
+      .box-query { fill: #0f172a; stroke: #f97316; stroke-width: 2; }
+      .text-title { font-size: 14px; font-weight: bold; fill: #06b6d4; }
+      .text-content { font-size: 12px; fill: #e2e8f0; }
+      .arrow { stroke: #7c3aed; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font-size: 11px; fill: #a1a1aa; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#7c3aed" />
+    </marker>
+  </defs>
 
-# QUERY PIPELINE
-! 👤  User Query (NL input)
-! ┌───────────────────────┐     ┌───────────────────────┐
-! │ retriever.py          │────▶│ FAISS Vector DB       │
-! │                       │◀────│ top-4 chunks          │
-! └─────────────┬─────────┘     └───────────────────────┘
-!       │ retrieved context
-!       ▼
-! ┌───────────────────────┐
-! │ generator.py          │
-! │  • build_prompt()
-! │  • System prompt + context + query
-! │  • Strict grounding rules
-! └─────────────┬─────────┘
-!       │ messages[]
-!       ▼
-! ┌───────────────────────┐
-! │ Groq API (llama-3.1)  │
-! │  • 8b-instant, temp=0.2, factual
-! │  • max_tokens=1024, stream=True
-! └─────────────┬─────────┘
-!       │ token stream
-!       ▼
-! ┌───────────────────────┐
-! │ Streamlit UI          │
-! │  • Real-time streaming ▌▌▌▌▌
-! │  • Source chunks expander
-! │  • Dark theme + custom CSS
-! └───────────────────────┘
+  <!-- INDEXING PIPELINE -->
+  <text x="50" y="30" class="text-title" font-size="16">📄 INDEXING PIPELINE</text>
 
-```
+  <!-- PDF Input -->
+  <rect x="50" y="50" width="120" height="60" class="box-indexing" rx="5"/>
+  <text x="110" y="85" class="text-content" text-anchor="middle">PDF/TXT File</text>
+
+  <!-- Document Processor -->
+  <rect x="50" y="130" width="120" height="80" class="box-indexing" rx="5"/>
+  <text x="110" y="150" class="text-title" text-anchor="middle">document_processor</text>
+  <text x="110" y="170" class="text-content" text-anchor="middle" font-size="10">Clean & Split</text>
+  <text x="110" y="185" class="text-content" text-anchor="middle" font-size="10">200w chunks</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 110 90 L 110 130"/>
+
+  <!-- Embeddings -->
+  <rect x="50" y="230" width="120" height="80" class="box-indexing" rx="5"/>
+  <text x="110" y="250" class="text-title" text-anchor="middle">embeddings.py</text>
+  <text x="110" y="270" class="text-content" text-anchor="middle" font-size="10">all-MiniLM</text>
+  <text x="110" y="285" class="text-content" text-anchor="middle" font-size="10">384-dim vectors</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 110 210 L 110 230"/>
+
+  <!-- FAISS Vector DB -->
+  <rect x="50" y="330" width="120" height="80" class="box" rx="5"/>
+  <text x="110" y="350" class="text-title" text-anchor="middle">FAISS Index</text>
+  <text x="110" y="370" class="text-content" text-anchor="middle" font-size="10">IndexFlatL2</text>
+  <text x="110" y="385" class="text-content" text-anchor="middle" font-size="10">Persisted</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 110 310 L 110 330"/>
+
+  <!-- QUERY PIPELINE -->
+  <text x="400" y="30" class="text-title" font-size="16">👤 QUERY PIPELINE</text>
+
+  <!-- User Query -->
+  <rect x="380" y="50" width="120" height="60" class="box-query" rx="5"/>
+  <text x="440" y="85" class="text-content" text-anchor="middle">User Query</text>
+
+  <!-- Retriever -->
+  <rect x="380" y="130" width="120" height="80" class="box-query" rx="5"/>
+  <text x="440" y="150" class="text-title" text-anchor="middle">retriever.py</text>
+  <text x="440" y="170" class="text-content" text-anchor="middle" font-size="10">Vector Search</text>
+  <text x="440" y="185" class="text-content" text-anchor="middle" font-size="10">Top-4 chunks</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 440 110 L 440 130"/>
+
+  <!-- Generator -->
+  <rect x="380" y="230" width="120" height="80" class="box-query" rx="5"/>
+  <text x="440" y="250" class="text-title" text-anchor="middle">generator.py</text>
+  <text x="440" y="270" class="text-content" text-anchor="middle" font-size="10">Build Prompt</text>
+  <text x="440" y="285" class="text-content" text-anchor="middle" font-size="10">Grounding Rules</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 440 210 L 440 230"/>
+
+  <!-- Groq API -->
+  <rect x="380" y="330" width="120" height="80" class="box" rx="5"/>
+  <text x="440" y="350" class="text-title" text-anchor="middle">Groq API</text>
+  <text x="440" y="370" class="text-content" text-anchor="middle" font-size="10">llama-3.1-8b</text>
+  <text x="440" y="385" class="text-content" text-anchor="middle" font-size="10">Streaming</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 440 310 L 440 330"/>
+
+  <!-- Streamlit UI -->
+  <rect x="380" y="430" width="120" height="80" class="box" rx="5"/>
+  <text x="440" y="450" class="text-title" text-anchor="middle">Streamlit UI</text>
+  <text x="440" y="470" class="text-content" text-anchor="middle" font-size="10">Real-time Stream</text>
+  <text x="440" y="485" class="text-content" text-anchor="middle" font-size="10">Source Chunks</text>
+
+  <!-- Arrow -->
+  <path class="arrow" d="M 440 410 L 440 430"/>
+
+  <!-- Connection between pipelines -->
+  <path class="arrow" d="M 170 370 L 380 370" stroke="#a78bfa" stroke-dasharray="5,5"/>
+
+</svg>
 
 </div>
-
 ---
 
 ## ✨ Features
