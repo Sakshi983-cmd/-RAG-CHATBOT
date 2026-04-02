@@ -82,66 +82,60 @@ class SakshiAIEngineer:
 <div align="center">
 
 ```
-╔══════════════════════════════════════════════════════════════════════════╗
-║                                                                          ║
-║   ░░░░░░░░░░░░░░░░░░   INDEXING PIPELINE   ░░░░░░░░░░░░░░░░░░░░░░░░    ║
-║                                                                          ║
-║                                                                          ║
-║    📄  PDF / TXT File                                                    ║
-║            │                                                             ║
-║            ▼                                                             ║
-║    ┌───────────────────┐                                                 ║
-║    │  document_        │  • Remove headers, footers, extra whitespace    ║
-║    │  processor.py     │  • Sentence-aware split → 200 word chunks       ║
-║    │                   │  • 30-word overlap for context continuity        ║
-║    └────────┬──────────┘                                                 ║
-║             │  chunks[]                                                  ║
-║             ▼                                                            ║
-║    ┌───────────────────┐                                                 ║
-║    │  embeddings.py    │  • all-MiniLM-L6-v2 (90MB, CPU-friendly)       ║
-║    │                   │  • 384-dimensional dense vectors                ║
-║    └────────┬──────────┘                                                 ║
-║             │  numpy float32 vectors                                     ║
-║             ▼                                                            ║
-║    ┌───────────────────┐                                                 ║
-║    │  FAISS            │  • IndexFlatL2 similarity search                ║
-║    │  Vector DB        │  • Saved as .index + .pkl files                 ║
-║    └───────────────────┘                                                 ║
-║                                                                          ║
-╠══════════════════════════════════════════════════════════════════════════╣
-║                                                                          ║
-║   ░░░░░░░░░░░░░░░░░░░░   QUERY PIPELINE   ░░░░░░░░░░░░░░░░░░░░░░░░░░   ║
-║                                                                          ║
-║                                                                          ║
-║    👤  User Query (natural language)                                     ║
-║            │                                                             ║
-║            ▼                                                             ║
-║    ┌───────────────────┐     ┌─────────────────────┐                    ║
-║    │  retriever.py     │────▶│  FAISS Vector DB     │                   ║
-║    │                   │◀────│  top-4 chunks        │                   ║
-║    └────────┬──────────┘     └─────────────────────┘                    ║
-║             │  retrieved context chunks                                  ║
-║             ▼                                                            ║
-║    ┌───────────────────┐                                                 ║
-║    │  generator.py     │  • System prompt + context + user query         ║
-║    │  build_prompt()   │  • Strict grounding rules                       ║
-║    └────────┬──────────┘                                                 ║
-║             │  messages[]                                                ║
-║             ▼                                                            ║
-║    ┌───────────────────┐                                                 ║
-║    │  Groq API         │  • llama-3.1-8b-instant                        ║
-║    │  llama-3.1-8b     │  • temperature=0.2 (factual)                   ║
-║    │  stream=True      │  • max_tokens=1024                              ║
-║    └────────┬──────────┘                                                 ║
-║             │  token-by-token stream                                     ║
-║             ▼                                                            ║
-║    ┌───────────────────┐                                                 ║
-║    │  Streamlit UI     │  • Real-time streaming ▌▌▌▌▌                   ║
-║    │  app.py           │  • Source chunks expander                       ║
-║    │                   │  • Dark theme + custom CSS                      ║
-║    └───────────────────┘                                                 ║
-║                                                                          ║
-╚══════════════════════════════════════════════════════════════════════════╝
+# INDEXING PIPELINE
++ 📄  PDF / TXT File
++ ┌───────────────────────┐
++ │ document_processor.py │
++ │  • Clean headers/footers
++ │  • Normalize whitespace
++ │  • Sentence-aware split → 200w chunks
++ │  • 30w overlap for continuity
++ └─────────────┬─────────┘
++       │ chunks[]
++       ▼
++ ┌───────────────────────┐
++ │ embeddings.py         │
++ │  • all-MiniLM-L6-v2 (CPU-friendly)
++ │  • 384-dim dense vectors
++ └─────────────┬─────────┘
++       │ numpy float32
++       ▼
++ ┌───────────────────────┐
++ │ FAISS Vector DB       │
++ │  • IndexFlatL2 search
++ │  • Stored as .index + .pkl
++ └───────────────────────┘
+
+# QUERY PIPELINE
+! 👤  User Query (NL input)
+! ┌───────────────────────┐     ┌───────────────────────┐
+! │ retriever.py          │────▶│ FAISS Vector DB       │
+! │                       │◀────│ top-4 chunks          │
+! └─────────────┬─────────┘     └───────────────────────┘
+!       │ retrieved context
+!       ▼
+! ┌───────────────────────┐
+! │ generator.py          │
+! │  • build_prompt()
+! │  • System prompt + context + query
+! │  • Strict grounding rules
+! └─────────────┬─────────┘
+!       │ messages[]
+!       ▼
+! ┌───────────────────────┐
+! │ Groq API (llama-3.1)  │
+! │  • 8b-instant, temp=0.2, factual
+! │  • max_tokens=1024, stream=True
+! └─────────────┬─────────┘
+!       │ token stream
+!       ▼
+! ┌───────────────────────┐
+! │ Streamlit UI          │
+! │  • Real-time streaming ▌▌▌▌▌
+! │  • Source chunks expander
+! │  • Dark theme + custom CSS
+! └───────────────────────┘
+
 ```
 
 </div>
