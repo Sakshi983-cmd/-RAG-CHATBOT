@@ -193,7 +193,7 @@ Best balance — small enough for precise retrieval, large enough for coherent c
 
 ## 📸 Demo
 
-![App Screenshot](assets/screenshots/app_screenshot.png)
+![App Screenshot](assets/app_screenshot.png)
 
 🔗 **Live App:** https://nhvb3mmj3ngfnosel4f9hf.streamlit.app
 
