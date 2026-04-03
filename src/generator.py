@@ -12,20 +12,30 @@ def get_client():
     return Groq(api_key=api_key)
 
 
+# 🔥 UPDATED PROMPT (STRONG VERSION)
 def build_prompt(query: str, context: str) -> list:
-    system_message = """You are a helpful AI assistant that answers questions strictly based on the provided document context.
-Rules:
-- Only answer using the information from the context below
-- If the answer is not in the context, say "I could not find this information in the provided document"
-- Be concise and accurate
-- Do not make up information"""
+    system_message = """You are an AI assistant specialized in answering questions from documents.
+
+STRICT RULES:
+1. Answer ONLY using the provided context.
+2. If the answer is not found, say: "I don't have enough information from the document."
+3. ALWAYS include sources in the format [Source 1], [Source 2].
+4. Do NOT make up any information.
+5. Be concise and accurate.
+
+Output Format:
+Answer: <your answer>
+
+Sources:
+[Source 1], [Source 2]
+"""
 
     user_message = f"""Context from document:
 {context}
 
 User Question: {query}
 
-Please answer based only on the context above."""
+Follow the output format strictly."""
 
     return [
         {"role": "system", "content": system_message},
@@ -33,9 +43,29 @@ Please answer based only on the context above."""
     ]
 
 
-def generate_streaming_response(query: str, context: str):
+# 🔥 CONTEXT BUILDER (NEW)
+def build_context(docs):
+    context = ""
+    for i, doc in enumerate(docs):
+        content = getattr(doc, "page_content", str(doc))
+        context += f"[Source {i+1}]: {content}\n"
+    return context
+
+
+# 🔥 STREAMING RESPONSE (UPDATED WITH SAFETY)
+def generate_streaming_response(query: str, docs):
     client = get_client()
+
+    # Build context with sources
+    context = build_context(docs)
+
+    # 🔴 No data fallback
+    if not context.strip():
+        yield "I don't have enough information from the document."
+        return
+
     messages = build_prompt(query, context)
+
     stream = client.chat.completions.create(
         model=GROQ_MODEL,
         messages=messages,
@@ -43,7 +73,11 @@ def generate_streaming_response(query: str, context: str):
         temperature=0.2,
         stream=True
     )
-    for chunk in stream:
-        token = chunk.choices[0].delta.content
-        if token is not None:
-            yield token
+
+    try:
+        for chunk in stream:
+            token = chunk.choices[0].delta.content
+            if token:
+                yield token
+    except Exception:
+        yield "\n\n⚠️ Error generating response. Please try again."
