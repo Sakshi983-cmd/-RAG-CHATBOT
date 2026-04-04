@@ -12,7 +12,7 @@ def get_client():
     return Groq(api_key=api_key)
 
 
-# 🔥 UPDATED PROMPT (STRONG VERSION)
+
 def build_prompt(query: str, context: str) -> list:
     system_message = """You are an AI assistant specialized in answering questions from documents.
 
@@ -43,7 +43,7 @@ Follow the output format strictly."""
     ]
 
 
-# 🔥 CONTEXT BUILDER (NEW)
+
 def build_context(docs):
     context = ""
     for i, doc in enumerate(docs):
@@ -52,14 +52,13 @@ def build_context(docs):
     return context
 
 
-# 🔥 STREAMING RESPONSE (UPDATED WITH SAFETY)
+
 def generate_streaming_response(query: str, docs):
     client = get_client()
 
-    # Build context with sources
     context = build_context(docs)
 
-    # 🔴 No data fallback
+    #  No data fallback
     if not context.strip():
         yield "I don't have enough information from the document."
         return
