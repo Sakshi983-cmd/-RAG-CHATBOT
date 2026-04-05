@@ -12,7 +12,6 @@ def get_client():
     return Groq(api_key=api_key)
 
 
-
 def build_prompt(query: str, context: str) -> list:
     system_message = """You are an AI assistant specialized in answering questions from documents.
 
@@ -43,7 +42,6 @@ Follow the output format strictly."""
     ]
 
 
-
 def build_context(docs):
     context = ""
     for i, doc in enumerate(docs):
@@ -52,31 +50,37 @@ def build_context(docs):
     return context
 
 
-
 def generate_streaming_response(query: str, docs):
     client = get_client()
 
     context = build_context(docs)
 
-    #  No data fallback
+    # ✅ No data fallback
     if not context.strip():
         yield "I don't have enough information from the document."
         return
 
     messages = build_prompt(query, context)
 
-    stream = client.chat.completions.create(
-        model=GROQ_MODEL,
-        messages=messages,
-        max_tokens=1024,
-        temperature=0.2,
-        stream=True
-    )
-
     try:
+        stream = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            max_tokens=512,      # faster streaming
+            temperature=0.2,
+            stream=True          # 🔥 MUST for streaming
+        )
+
         for chunk in stream:
-            token = chunk.choices[0].delta.content
-            if token:
-                yield token
-    except Exception:
-        yield "\n\n⚠️ Error generating response. Please try again."
+            # ✅ safe handling
+            if not chunk.choices:
+                continue
+
+            delta = chunk.choices[0].delta
+
+            # ✅ only yield actual tokens
+            if hasattr(delta, "content") and delta.content:
+                yield delta.content
+
+    except Exception as e:
+        yield f"\n\n⚠️ Error: {str(e)}"
