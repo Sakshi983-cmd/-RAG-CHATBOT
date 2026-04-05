@@ -1,25 +1,51 @@
-import numpy as np
-from config import TOP_K_RESULTS
-from src.embeddings import get_embedding_model
+import os
+from groq import Groq
+from config import GROQ_MODEL
 
 
-def retrieve_relevant_chunks(query: str, index, chunks: list, top_k: int = TOP_K_RESULTS) -> list:
-    model = get_embedding_model()
-    query_embedding = model.encode([query], convert_to_numpy=True).astype(np.float32)
-    distances, indices = index.search(query_embedding, top_k)
-    results = []
-    for i, idx in enumerate(indices[0]):
-        if idx != -1:
-            chunk = chunks[idx].copy()
-            chunk["relevance_score"] = float(distances[0][i])
-            results.append(chunk)
-    return results
+def get_client():
+    # Pehle Streamlit secrets check karo, phir env variable
+    try:
+        import streamlit as st
+        api_key = st.secrets["GROQ_API_KEY"]
+    except Exception:
+        api_key = os.environ.get("GROQ_API_KEY", "")
+    return Groq(api_key=api_key)
 
 
-def format_context(retrieved_chunks: list) -> str:
-    parts = []
-    for i, chunk in enumerate(retrieved_chunks):
-        # 150 words per chunk = safe token usage even with 4 chunks
-        words = chunk['text'].split()[:150]
-        parts.append(f"[Source {i+1}]\n{' '.join(words)}")
-    return "\n\n".join(parts)
+def build_prompt(query: str, context: str) -> list:
+    system_message = """You are a helpful AI assistant that answers questions strictly based on the provided document context.
+Rules:
+- Only answer using the information from the context below
+- If the answer is not in the context, say "I could not find this information in the provided document"
+- Be concise and accurate
+- Do not make up information"""
+
+    user_message = f"""Context from document:
+{context}
+
+User Question: {query}
+
+Please answer based only on the context above."""
+
+    return [
+        {"role": "system", "content": system_message},
+        {"role": "user", "content": user_message}
+    ]
+
+
+def generate_streaming_response(query: str, context: str):
+    """Token by token streaming for Streamlit."""
+    client = get_client()
+    messages = build_prompt(query, context)
+    stream = client.chat.completions.create(
+        model=GROQ_MODEL,
+        messages=messages,
+        max_tokens=1024,
+        temperature=0.2,
+        stream=True
+    )
+    for chunk in stream:
+        token = chunk.choices[0].delta.content
+        if token is not None:
+            yield token
