@@ -4,7 +4,6 @@ from config import GROQ_MODEL
 
 
 def get_client():
-    # Pehle Streamlit secrets check karo, phir env variable
     try:
         import streamlit as st
         api_key = st.secrets["GROQ_API_KEY"]
@@ -35,7 +34,6 @@ Please answer based only on the context above."""
 
 
 def generate_streaming_response(query: str, context: str):
-    """Token by token streaming for Streamlit."""
     client = get_client()
     messages = build_prompt(query, context)
     stream = client.chat.completions.create(
