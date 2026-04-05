@@ -4,11 +4,13 @@ from config import GROQ_MODEL
 
 
 def get_client():
-    try:
-        import streamlit as st
-        api_key = st.secrets["GROQ_API_KEY"]
-    except Exception:
-        api_key = os.environ.get("GROQ_API_KEY", "")
+    import streamlit as st
+
+    api_key = st.secrets.get("GROQ_API_KEY")
+
+    if not api_key:
+        raise ValueError("❌ API key missing")
+
     return Groq(api_key=api_key)
 
 
