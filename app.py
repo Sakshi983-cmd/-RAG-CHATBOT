@@ -381,11 +381,11 @@ if prompt := st.chat_input("Ask anything about your document..."):
     with st.chat_message("assistant"):
         from src.retriever import retrieve_relevant_chunks, format_context
         from src.generator import generate_streaming_response
-
         retrieved = retrieve_relevant_chunks(
-            prompt, st.session_state.index, st.session_state.chunks
+          prompt, st.session_state.index, st.session_state.chunks
         )
-        context = format_context(retrieved)
+
+        for token in generate_streaming_response(prompt, retrieved):
 
         placeholder = st.empty()
         full_response = ""
