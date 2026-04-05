@@ -8,7 +8,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ─── Custom CSS ──────────────────────────────────────────────
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
@@ -139,7 +139,7 @@ hr { border-color: #1e1e2e !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# ─── Session State ────────────────────────────────────────────
+# Session State 
 for key, val in {
     "messages": [], "vectordb_loaded": False,
     "index": None, "chunks": None, "num_chunks": 0
@@ -147,7 +147,7 @@ for key, val in {
     if key not in st.session_state:
         st.session_state[key] = val
 
-# ─── Sidebar ─────────────────────────────────────────────────
+# Sidebar 
 with st.sidebar:
     st.markdown("""
     <div class="logo-area">
@@ -205,7 +205,7 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-# ─── Main Area ────────────────────────────────────────────────
+#  Main Area 
 st.markdown("""
 <div class="main-header">
     <div class="main-title">Ask your documents.</div>
