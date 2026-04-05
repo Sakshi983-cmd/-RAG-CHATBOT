@@ -1,5 +1,7 @@
 import os
 import streamlit as st
+from src.retriever import retrieve_relevant_chunks, format_context
+from src.generator import generate_streaming_response
 
 st.set_page_config(
     page_title="DocMind AI",
@@ -22,24 +24,10 @@ html, body, [class*="css"] {
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 2px; }
-
-section[data-testid="stSidebar"] {
-    background: #0d0d1a;
-    border-right: 1px solid #16162a;
-}
+section[data-testid="stSidebar"] { background: #0d0d1a; border-right: 1px solid #16162a; }
 section[data-testid="stSidebar"] .block-container { padding: 1.8rem 1.2rem; }
-
-.brand {
-    display: flex; flex-direction: column; align-items: center;
-    padding-bottom: 1.4rem; border-bottom: 1px solid #16162a; margin-bottom: 1.4rem;
-}
-.brand-icon {
-    width: 44px; height: 44px;
-    background: linear-gradient(135deg, #6d28d9, #0ea5e9);
-    border-radius: 12px; display: flex; align-items: center;
-    justify-content: center; font-size: 1.3rem; margin-bottom: 10px;
-    box-shadow: 0 0 24px rgba(109,40,217,0.35);
-}
+.brand { display: flex; flex-direction: column; align-items: center; padding-bottom: 1.4rem; border-bottom: 1px solid #16162a; margin-bottom: 1.4rem; }
+.brand-icon { width: 44px; height: 44px; background: linear-gradient(135deg, #6d28d9, #0ea5e9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 10px; box-shadow: 0 0 24px rgba(109,40,217,0.35); }
 .brand-name { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 1.15rem; color: #f0f0ff; letter-spacing: -0.3px; }
 .brand-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: #3a3a5a; letter-spacing: 2.5px; text-transform: uppercase; margin-top: 2px; }
 .section-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: #3a3a5a; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px; margin-top: 16px; }
@@ -54,13 +42,7 @@ section[data-testid="stSidebar"] .block-container { padding: 1.8rem 1.2rem; }
 .status-waiting { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); color: #f59e0b; }
 [data-testid="stFileUploader"] { background: #111120; border: 1px dashed #1e1e35; border-radius: 10px; padding: 4px; }
 [data-testid="stFileUploader"]:hover { border-color: #6d28d9; }
-.stButton > button {
-    background: linear-gradient(135deg, #6d28d9, #4f46e5) !important;
-    color: white !important; border: none !important; border-radius: 10px !important;
-    font-family: 'Manrope', sans-serif !important; font-weight: 600 !important;
-    font-size: 0.83rem !important; padding: 0.55rem 1rem !important;
-    transition: all 0.2s ease !important;
-}
+.stButton > button { background: linear-gradient(135deg, #6d28d9, #4f46e5) !important; color: white !important; border: none !important; border-radius: 10px !important; font-family: 'Manrope', sans-serif !important; font-weight: 600 !important; font-size: 0.83rem !important; padding: 0.55rem 1rem !important; transition: all 0.2s ease !important; }
 .stButton > button:hover { transform: translateY(-1px) !important; box-shadow: 0 6px 18px rgba(109,40,217,0.45) !important; }
 [data-testid="stMetric"] { background: #111120; border: 1px solid #1a1a2e; border-radius: 10px; padding: 0.8rem 1rem; }
 [data-testid="stMetricValue"] { font-family: 'Manrope', sans-serif !important; font-weight: 800 !important; font-size: 1.6rem !important; color: #6d28d9 !important; }
@@ -187,9 +169,6 @@ if prompt := st.chat_input("Ask anything about your document..."):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        from src.retriever import retrieve_relevant_chunks, format_context
-        from src.generator import generate_streaming_response
-
         retrieved = retrieve_relevant_chunks(
             prompt, st.session_state.index, st.session_state.chunks
         )
