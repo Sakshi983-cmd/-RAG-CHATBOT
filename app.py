@@ -8,296 +8,271 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# CSS styling
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
-/* Base */
 html, body, [class*="css"] {
-    font-family: 'Syne', sans-serif;
-    background-color: #0a0a0f;
-    color: #e8e8f0;
+    font-family: 'Manrope', sans-serif;
+    background-color: #080810;
+    color: #e2e2f0;
 }
 
-/* Hide default streamlit elements */
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 2rem 2rem 2rem 2rem; max-width: 100%; }
+.block-container { padding: 2rem 2.5rem; max-width: 100%; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #0a0a0f; }
-::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 2px; }
 
-/* Sidebar */
 section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0f0f1a 0%, #0a0a0f 100%);
-    border-right: 1px solid #1e1e2e;
+    background: #0d0d1a;
+    border-right: 1px solid #16162a;
 }
-section[data-testid="stSidebar"] .block-container {
-    padding: 1.5rem 1rem;
-}
+section[data-testid="stSidebar"] .block-container { padding: 1.8rem 1.2rem; }
 
-/* Logo area */
-.logo-area {
-    text-align: center;
-    padding: 1rem 0 1.5rem 0;
-    border-bottom: 1px solid #1e1e2e;
-    margin-bottom: 1.5rem;
+.brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid #16162a;
+    margin-bottom: 1.4rem;
 }
-.logo-title {
-    font-family: 'Syne', sans-serif;
+.brand-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, #6d28d9, #0ea5e9);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    box-shadow: 0 0 24px rgba(109,40,217,0.35);
+}
+.brand-name {
+    font-family: 'Manrope', sans-serif;
     font-weight: 800;
-    font-size: 1.6rem;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
+    font-size: 1.15rem;
+    color: #f0f0ff;
+    letter-spacing: -0.3px;
 }
-.logo-sub {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    color: #4a4a6a;
-    letter-spacing: 2px;
+.brand-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #3a3a5a;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
     margin-top: 2px;
 }
 
-/* Sidebar labels */
-.sidebar-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    color: #4a4a6a;
-    letter-spacing: 2px;
+.section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #3a3a5a;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    margin-top: 1rem;
+    margin-bottom: 8px;
+    margin-top: 16px;
 }
 
-/* Info badges */
-.badge-row {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 1rem;
-}
-.badge {
+.model-card {
+    background: #111120;
+    border: 1px solid #1a1a2e;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: #13131f;
-    border: 1px solid #1e1e2e;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 0.78rem;
-    color: #a0a0c0;
+    gap: 10px;
 }
-.badge-dot {
-    width: 6px; height: 6px;
+.model-dot {
+    width: 7px; height: 7px;
     border-radius: 50%;
-    background: #7c3aed;
     flex-shrink: 0;
 }
-.badge-dot.cyan { background: #06b6d4; }
-.badge-dot.green { background: #10b981; }
+.dot-purple { background: #6d28d9; box-shadow: 0 0 6px #6d28d9; }
+.dot-blue { background: #0ea5e9; box-shadow: 0 0 6px #0ea5e9; }
+.dot-green { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.model-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: #8888aa;
+}
 
-/* Status pill */
-.status-ready {
+.status-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.75rem;
+    padding: 5px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+}
+.status-ready {
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
     color: #10b981;
-    font-family: 'Space Mono', monospace;
 }
 .status-waiting {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(245, 158, 11, 0.1);
-    border: 1px solid rgba(245, 158, 11, 0.3);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.75rem;
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
     color: #f59e0b;
-    font-family: 'Space Mono', monospace;
 }
 
-/* File uploader */
 [data-testid="stFileUploader"] {
-    background: #13131f;
-    border: 1px dashed #2a2a3e;
-    border-radius: 12px;
-    padding: 0.5rem;
-    transition: border-color 0.2s;
+    background: #111120;
+    border: 1px dashed #1e1e35;
+    border-radius: 10px;
+    padding: 4px;
 }
-[data-testid="stFileUploader"]:hover {
-    border-color: #7c3aed;
-}
+[data-testid="stFileUploader"]:hover { border-color: #6d28d9; }
 
-/* Buttons */
 .stButton > button {
-    background: linear-gradient(135deg, #7c3aed, #5b21b6) !important;
+    background: linear-gradient(135deg, #6d28d9, #4f46e5) !important;
     color: white !important;
     border: none !important;
     border-radius: 10px !important;
-    font-family: 'Syne', sans-serif !important;
+    font-family: 'Manrope', sans-serif !important;
     font-weight: 600 !important;
-    font-size: 0.85rem !important;
-    padding: 0.6rem 1rem !important;
+    font-size: 0.83rem !important;
+    padding: 0.55rem 1rem !important;
     transition: all 0.2s ease !important;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
 }
 .stButton > button:hover {
     transform: translateY(-1px) !important;
-    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4) !important;
+    box-shadow: 0 6px 18px rgba(109,40,217,0.45) !important;
 }
 
-/* Main header */
-.main-header {
-    padding: 2rem 0 1.5rem 0;
-    border-bottom: 1px solid #1e1e2e;
+[data-testid="stMetric"] {
+    background: #111120;
+    border: 1px solid #1a1a2e;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+}
+[data-testid="stMetricValue"] {
+    font-family: 'Manrope', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 1.6rem !important;
+    color: #6d28d9 !important;
+}
+[data-testid="stMetricLabel"] {
+    font-family: 'DM Mono', monospace !important;
+    font-size: 0.62rem !important;
+    color: #3a3a5a !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+}
+
+.hero {
+    padding: 2.5rem 0 2rem 0;
+    border-bottom: 1px solid #16162a;
     margin-bottom: 2rem;
 }
-.main-title {
-    font-family: 'Syne', sans-serif;
+.hero-title {
+    font-family: 'Manrope', sans-serif;
     font-weight: 800;
-    font-size: 2.2rem;
-    background: linear-gradient(135deg, #e8e8f0 30%, #7c3aed);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -1px;
+    font-size: 2.6rem;
+    color: #f0f0ff;
+    letter-spacing: -1.5px;
     line-height: 1.1;
 }
-.main-subtitle {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    color: #4a4a6a;
-    letter-spacing: 1.5px;
+.hero-title span {
+    background: linear-gradient(135deg, #6d28d9, #0ea5e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: #3a3a5a;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
-/* Empty state */
-.empty-state {
+.empty-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 5rem 2rem;
+    padding: 4rem 2rem;
     text-align: center;
+    gap: 16px;
 }
-.empty-icon {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    opacity: 0.4;
+.empty-glyph {
+    width: 64px; height: 64px;
+    background: #111120;
+    border: 1px solid #1a1a2e;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
 }
 .empty-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 1.2rem;
-    color: #4a4a6a;
-    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    color: #3a3a5a;
 }
-.empty-hint {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    color: #2a2a3e;
+.empty-steps {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.step-pill {
+    background: #111120;
+    border: 1px solid #1a1a2e;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: #4a4a6a;
     letter-spacing: 1px;
 }
+.step-arrow { color: #2a2a4a; font-size: 0.8rem; }
 
-/* Chat messages */
 [data-testid="stChatMessage"] {
     background: transparent !important;
     border: none !important;
-    padding: 0.5rem 0 !important;
+    padding: 0.4rem 0 !important;
 }
 
-/* User message bubble */
-[data-testid="stChatMessage"][data-testid*="user"] {
-    background: #13131f !important;
-}
-
-/* Chat input */
 [data-testid="stChatInput"] {
-    background: #13131f !important;
-    border: 1px solid #1e1e2e !important;
-    border-radius: 14px !important;
+    background: #111120 !important;
+    border: 1px solid #1a1a2e !important;
+    border-radius: 12px !important;
 }
 [data-testid="stChatInput"]:focus-within {
-    border-color: #7c3aed !important;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15) !important;
-}
-[data-testid="stChatInput"] textarea {
-    font-family: 'Syne', sans-serif !important;
-    font-size: 0.9rem !important;
-    color: #e8e8f0 !important;
-    background: transparent !important;
+    border-color: #6d28d9 !important;
+    box-shadow: 0 0 0 3px rgba(109,40,217,0.12) !important;
 }
 
-/* Expander */
 [data-testid="stExpander"] {
-    background: #0f0f1a !important;
-    border: 1px solid #1e1e2e !important;
+    background: #0d0d1a !important;
+    border: 1px solid #16162a !important;
     border-radius: 10px !important;
-    margin-top: 0.5rem;
-}
-[data-testid="stExpander"] summary {
-    font-family: 'Space Mono', monospace !important;
-    font-size: 0.72rem !important;
-    color: #4a4a6a !important;
-    letter-spacing: 1px;
+    margin-top: 6px;
 }
 
-/* Metric */
-[data-testid="stMetric"] {
-    background: #13131f;
-    border: 1px solid #1e1e2e;
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
-}
-[data-testid="stMetricLabel"] {
-    font-family: 'Space Mono', monospace !important;
-    font-size: 0.65rem !important;
-    color: #4a4a6a !important;
-    letter-spacing: 1.5px !important;
-    text-transform: uppercase !important;
-}
-[data-testid="stMetricValue"] {
-    font-family: 'Syne', sans-serif !important;
-    font-weight: 800 !important;
-    font-size: 1.8rem !important;
-    color: #7c3aed !important;
-}
-
-/* Spinner */
-[data-testid="stSpinner"] { color: #7c3aed !important; }
-
-/* Divider */
-hr { border-color: #1e1e2e !important; }
-
-/* Source chunk text */
-.source-chip {
+.source-tag {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(124, 58, 237, 0.1);
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    border-radius: 6px;
-    padding: 3px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.68rem;
-    color: #7c3aed;
-    margin-bottom: 8px;
+    gap: 5px;
+    background: rgba(109,40,217,0.08);
+    border: 1px solid rgba(109,40,217,0.18);
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: #6d28d9;
+    margin-bottom: 6px;
 }
+
+hr { border-color: #16162a !important; }
 </style>
 """, unsafe_allow_html=True)
 
-# session state init
 for key, val in {
     "messages": [], "vectordb_loaded": False,
     "index": None, "chunks": None, "num_chunks": 0
@@ -305,30 +280,27 @@ for key, val in {
     if key not in st.session_state:
         st.session_state[key] = val
 
-# sidebar
 with st.sidebar:
-
     st.markdown("""
-    <div class="logo-area">
-        <div class="logo-title">DocMind AI</div>
-        <div class="logo-sub">RAG · Powered by Groq</div>
+    <div class="brand">
+        <div class="brand-icon">🧠</div>
+        <div class="brand-name">DocMind AI</div>
+        <div class="brand-tag">RAG · Groq · FAISS</div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="sidebar-label">⚡ Model Stack</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Model Stack</div>', unsafe_allow_html=True)
     st.markdown("""
-    <div class="badge-row">
-        <div class="badge"><div class="badge-dot"></div> llama-3.1-8b-instant</div>
-        <div class="badge"><div class="badge-dot cyan"></div> all-MiniLM-L6-v2</div>
-        <div class="badge"><div class="badge-dot green"></div> FAISS · Top-K: 4</div>
-    </div>
+    <div class="model-card"><div class="model-dot dot-purple"></div><span class="model-text">llama-3.1-8b-instant</span></div>
+    <div class="model-card"><div class="model-dot dot-blue"></div><span class="model-text">all-MiniLM-L6-v2</span></div>
+    <div class="model-card"><div class="model-dot dot-green"></div><span class="model-text">FAISS · Top-K: 2</span></div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="sidebar-label">📄 Document</div>', unsafe_allow_html=True)
-    uploaded_file = st.file_uploader("", type=["pdf", "txt"], label_visibility="collapsed")
+    st.markdown('<div class="section-label">Document</div>', unsafe_allow_html=True)
+    uploaded_file = st.file_uploader("Upload file", type=["pdf", "txt"], label_visibility="collapsed")
 
     if uploaded_file:
-        if st.button("⚡ Process Document", use_container_width=True):
+        if st.button("Process Document", use_container_width=True):
             with st.spinner("Chunking & indexing..."):
                 try:
                     from src.document_processor import process_document
@@ -347,58 +319,59 @@ with st.sidebar:
                     st.session_state.num_chunks = len(chunks)
                     st.session_state.vectordb_loaded = True
                     st.session_state.messages = []
-                    st.success(f"✅ {len(chunks)} chunks indexed!")
+                    st.success(f"Done! {len(chunks)} chunks indexed.")
                 except Exception as e:
-                    st.error(f"❌ {str(e)}")
+                    st.error(f"Error: {str(e)}")
 
-    st.markdown('<div class="sidebar-label">📊 Index Stats</div>', unsafe_allow_html=True)
-
+    st.markdown('<div class="section-label">Index Stats</div>', unsafe_allow_html=True)
     if st.session_state.vectordb_loaded:
-        st.markdown('<div class="status-ready">● Vector DB Ready</div>', unsafe_allow_html=True)
+        st.markdown('<div class="status-badge status-ready">● Vector DB Ready</div>', unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
         st.metric("Chunks Indexed", st.session_state.num_chunks)
     else:
-        st.markdown('<div class="status-waiting">● Awaiting Document</div>', unsafe_allow_html=True)
+        st.markdown('<div class="status-badge status-waiting">● Awaiting Document</div>', unsafe_allow_html=True)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    if st.button("🗑️ Clear Chat", use_container_width=True):
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("Clear Chat", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
-# main chat area
 st.markdown("""
-<div class="main-header">
-    <div class="main-title">Ask your documents.</div>
-    <div class="main-subtitle">Retrieval-Augmented Generation · Real-time Streaming</div>
+<div class="hero">
+    <div class="hero-title">Ask your <span>documents.</span></div>
+    <div class="hero-sub">Retrieval-Augmented Generation · Real-time Streaming</div>
 </div>
 """, unsafe_allow_html=True)
 
-# Empty state
 if not st.session_state.messages:
     st.markdown("""
-    <div class="empty-state">
-        <div class="empty-icon">🧠</div>
+    <div class="empty-wrap">
+        <div class="empty-glyph">🧠</div>
         <div class="empty-title">No conversation yet</div>
-        <div class="empty-hint">UPLOAD A DOCUMENT → PROCESS → START ASKING</div>
+        <div class="empty-steps">
+            <span class="step-pill">Upload doc</span>
+            <span class="step-arrow">→</span>
+            <span class="step-pill">Process</span>
+            <span class="step-arrow">→</span>
+            <span class="step-pill">Ask anything</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-# Chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
         if message["role"] == "assistant" and "sources" in message:
-            with st.expander("📎 VIEW SOURCE CHUNKS"):
+            with st.expander("View source chunks"):
                 for i, src in enumerate(message["sources"]):
-                    st.markdown(f'<div class="source-chip">◆ SOURCE {i+1} &nbsp;·&nbsp; CHUNK #{src["chunk_id"]}</div>', unsafe_allow_html=True)
-                    st.caption(src["text"][:350] + "..." if len(src["text"]) > 350 else src["text"])
+                    st.markdown(f'<div class="source-tag">Source {i+1} · Chunk #{src["chunk_id"]}</div>', unsafe_allow_html=True)
+                    st.caption(src["text"][:300] + "..." if len(src["text"]) > 300 else src["text"])
                     if i < len(message["sources"]) - 1:
                         st.divider()
 
-# Chat input
 if prompt := st.chat_input("Ask anything about your document..."):
     if not st.session_state.vectordb_loaded:
-        st.warning("⚠️ Please upload and process a document first!")
+        st.warning("Please upload and process a document first.")
         st.stop()
 
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -422,13 +395,13 @@ if prompt := st.chat_input("Ask anything about your document..."):
                 placeholder.markdown(full_response + "▌")
             placeholder.markdown(full_response)
         except Exception as e:
-            full_response = f"❌ Error: {str(e)}"
+            full_response = f"Error: {str(e)}"
             placeholder.markdown(full_response)
 
-        with st.expander("📎 VIEW SOURCE CHUNKS"):
+        with st.expander("View source chunks"):
             for i, src in enumerate(retrieved):
-                st.markdown(f'<div class="source-chip">◆ SOURCE {i+1} &nbsp;·&nbsp; CHUNK #{src["chunk_id"]}</div>', unsafe_allow_html=True)
-                st.caption(src["text"][:350] + "..." if len(src["text"]) > 350 else src["text"])
+                st.markdown(f'<div class="source-tag">Source {i+1} · Chunk #{src["chunk_id"]}</div>', unsafe_allow_html=True)
+                st.caption(src["text"][:300] + "..." if len(src["text"]) > 300 else src["text"])
                 if i < len(retrieved) - 1:
                     st.divider()
 
