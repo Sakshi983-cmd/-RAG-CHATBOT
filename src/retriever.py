@@ -20,8 +20,7 @@ def retrieve_relevant_chunks(query: str, index, chunks: list, top_k: int = TOP_K
 def format_context(retrieved_chunks: list) -> str:
     parts = []
     for i, chunk in enumerate(retrieved_chunks):
-        # trim
-        words = chunk['text'].split()[:300]
+        words = chunk['text'].split()[:100]
         trimmed = " ".join(words)
         parts.append(f"[Source {i+1}]\n{trimmed}")
     return "\n\n".join(parts)
