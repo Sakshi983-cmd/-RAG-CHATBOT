@@ -59,7 +59,7 @@ class SakshiAIEngineer:
 
 <br/>
 
-### 🔴 [LIVE APP → nhvb3mmj3ngfnosel4f9hf.streamlit.app](https://nhvb3mmj3ngfnosel4f9hf.streamlit.app)
+### 🔴 [LIVE APP → nhvb3mmj3ngfnosel4f9hf.streamlit.app](https://nhvb3mmj3ngfnosel4f9hf.streamlit.app/)
 
 </div>
 
