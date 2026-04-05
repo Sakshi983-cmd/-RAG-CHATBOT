@@ -44,15 +44,15 @@ Follow the output format strictly."""
     ]
 
 
-# 🔥 OPTIMIZED CONTEXT (token-safe)
-def build_context(docs, max_chars=1000):
+# ✅ Balanced context (not too small, not too big)
+def build_context(docs, max_chars=1500):
     context = ""
 
     for i, doc in enumerate(docs):
         content = getattr(doc, "page_content", str(doc))
 
-        # limit each chunk
-        content = content[:200]
+        # balanced trimming
+        content = content[:400]
 
         context += f"[Source {i+1}]: {content}\n"
 
@@ -64,11 +64,6 @@ def generate_streaming_response(query: str, docs):
 
     context = build_context(docs)
 
-    # safety guard
-    if len(context) > 1000:
-        context = context[:1000]
-
-    # no data fallback
     if not context.strip():
         yield "I don't have enough information from the document."
         return
@@ -79,7 +74,7 @@ def generate_streaming_response(query: str, docs):
         stream = client.chat.completions.create(
             model=GROQ_MODEL,
             messages=messages,
-            max_tokens=200,      # 🔥 safe limit
+            max_tokens=300,   # balanced
             temperature=0.2,
             stream=True
         )
