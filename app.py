@@ -8,26 +8,37 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-
+# CSS styling
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
 
+/* Base */
 html, body, [class*="css"] {
     font-family: 'Syne', sans-serif;
     background-color: #0a0a0f;
     color: #e8e8f0;
 }
+
+/* Hide default streamlit elements */
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 2rem; max-width: 100%; }
+.block-container { padding: 2rem 2rem 2rem 2rem; max-width: 100%; }
+
+/* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #0a0a0f; }
 ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+
+/* Sidebar */
 section[data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0f0f1a 0%, #0a0a0f 100%);
     border-right: 1px solid #1e1e2e;
 }
-section[data-testid="stSidebar"] .block-container { padding: 1.5rem 1rem; }
+section[data-testid="stSidebar"] .block-container {
+    padding: 1.5rem 1rem;
+}
+
+/* Logo area */
 .logo-area {
     text-align: center;
     padding: 1rem 0 1.5rem 0;
@@ -51,6 +62,8 @@ section[data-testid="stSidebar"] .block-container { padding: 1.5rem 1rem; }
     text-transform: uppercase;
     margin-top: 2px;
 }
+
+/* Sidebar labels */
 .sidebar-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.65rem;
@@ -60,86 +73,231 @@ section[data-testid="stSidebar"] .block-container { padding: 1.5rem 1rem; }
     margin-bottom: 0.5rem;
     margin-top: 1rem;
 }
-.badge-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
-.badge {
-    display: flex; align-items: center; gap: 8px;
-    background: #13131f; border: 1px solid #1e1e2e;
-    border-radius: 8px; padding: 8px 12px;
-    font-size: 0.78rem; color: #a0a0c0;
+
+/* Info badges */
+.badge-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
 }
-.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #7c3aed; flex-shrink: 0; }
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #13131f;
+    border: 1px solid #1e1e2e;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: #a0a0c0;
+}
+.badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #7c3aed;
+    flex-shrink: 0;
+}
 .badge-dot.cyan { background: #06b6d4; }
 .badge-dot.green { background: #10b981; }
+
+/* Status pill */
 .status-ready {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3);
-    border-radius: 20px; padding: 4px 12px;
-    font-size: 0.75rem; color: #10b981; font-family: 'Space Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    color: #10b981;
+    font-family: 'Space Mono', monospace;
 }
 .status-waiting {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3);
-    border-radius: 20px; padding: 4px 12px;
-    font-size: 0.75rem; color: #f59e0b; font-family: 'Space Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    color: #f59e0b;
+    font-family: 'Space Mono', monospace;
 }
+
+/* File uploader */
 [data-testid="stFileUploader"] {
-    background: #13131f; border: 1px dashed #2a2a3e;
-    border-radius: 12px; padding: 0.5rem; transition: border-color 0.2s;
+    background: #13131f;
+    border: 1px dashed #2a2a3e;
+    border-radius: 12px;
+    padding: 0.5rem;
+    transition: border-color 0.2s;
 }
-[data-testid="stFileUploader"]:hover { border-color: #7c3aed; }
+[data-testid="stFileUploader"]:hover {
+    border-color: #7c3aed;
+}
+
+/* Buttons */
 .stButton > button {
     background: linear-gradient(135deg, #7c3aed, #5b21b6) !important;
-    color: white !important; border: none !important;
-    border-radius: 10px !important; font-family: 'Syne', sans-serif !important;
-    font-weight: 600 !important; font-size: 0.85rem !important;
-    padding: 0.6rem 1rem !important; transition: all 0.2s ease !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    padding: 0.6rem 1rem !important;
+    transition: all 0.2s ease !important;
+    letter-spacing: 0.3px;
 }
 .stButton > button:hover {
     transform: translateY(-1px) !important;
-    box-shadow: 0 8px 20px rgba(124,58,237,0.4) !important;
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4) !important;
 }
-.main-header { padding: 2rem 0 1.5rem 0; border-bottom: 1px solid #1e1e2e; margin-bottom: 2rem; }
+
+/* Main header */
+.main-header {
+    padding: 2rem 0 1.5rem 0;
+    border-bottom: 1px solid #1e1e2e;
+    margin-bottom: 2rem;
+}
 .main-title {
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.2rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
     background: linear-gradient(135deg, #e8e8f0 30%, #7c3aed);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    letter-spacing: -1px; line-height: 1.1;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    line-height: 1.1;
 }
 .main-subtitle {
-    font-family: 'Space Mono', monospace; font-size: 0.75rem;
-    color: #4a4a6a; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #4a4a6a;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 6px;
 }
+
+/* Empty state */
 .empty-state {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; padding: 5rem 2rem; text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    text-align: center;
 }
-.empty-icon { font-size: 3.5rem; margin-bottom: 1.5rem; opacity: 0.4; }
-.empty-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; color: #4a4a6a; margin-bottom: 0.5rem; }
-.empty-hint { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #2a2a3e; letter-spacing: 1px; }
-[data-testid="stChatMessage"] { background: transparent !important; border: none !important; padding: 0.5rem 0 !important; }
+.empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.4;
+}
+.empty-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #4a4a6a;
+    margin-bottom: 0.5rem;
+}
+.empty-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: #2a2a3e;
+    letter-spacing: 1px;
+}
+
+/* Chat messages */
+[data-testid="stChatMessage"] {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.5rem 0 !important;
+}
+
+/* User message bubble */
+[data-testid="stChatMessage"][data-testid*="user"] {
+    background: #13131f !important;
+}
+
+/* Chat input */
 [data-testid="stChatInput"] {
-    background: #13131f !important; border: 1px solid #1e1e2e !important; border-radius: 14px !important;
+    background: #13131f !important;
+    border: 1px solid #1e1e2e !important;
+    border-radius: 14px !important;
 }
 [data-testid="stChatInput"]:focus-within {
-    border-color: #7c3aed !important; box-shadow: 0 0 0 3px rgba(124,58,237,0.15) !important;
+    border-color: #7c3aed !important;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15) !important;
 }
+[data-testid="stChatInput"] textarea {
+    font-family: 'Syne', sans-serif !important;
+    font-size: 0.9rem !important;
+    color: #e8e8f0 !important;
+    background: transparent !important;
+}
+
+/* Expander */
 [data-testid="stExpander"] {
-    background: #0f0f1a !important; border: 1px solid #1e1e2e !important;
-    border-radius: 10px !important; margin-top: 0.5rem;
+    background: #0f0f1a !important;
+    border: 1px solid #1e1e2e !important;
+    border-radius: 10px !important;
+    margin-top: 0.5rem;
 }
-[data-testid="stMetric"] { background: #13131f; border: 1px solid #1e1e2e; border-radius: 10px; padding: 0.8rem 1rem; }
-[data-testid="stMetricValue"] { font-family: 'Syne', sans-serif !important; font-weight: 800 !important; font-size: 1.8rem !important; color: #7c3aed !important; }
+[data-testid="stExpander"] summary {
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.72rem !important;
+    color: #4a4a6a !important;
+    letter-spacing: 1px;
+}
+
+/* Metric */
+[data-testid="stMetric"] {
+    background: #13131f;
+    border: 1px solid #1e1e2e;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+}
+[data-testid="stMetricLabel"] {
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.65rem !important;
+    color: #4a4a6a !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+}
+[data-testid="stMetricValue"] {
+    font-family: 'Syne', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 1.8rem !important;
+    color: #7c3aed !important;
+}
+
+/* Spinner */
+[data-testid="stSpinner"] { color: #7c3aed !important; }
+
+/* Divider */
 hr { border-color: #1e1e2e !important; }
+
+/* Source chunk text */
 .source-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2);
-    border-radius: 6px; padding: 3px 10px;
-    font-family: 'Space Mono', monospace; font-size: 0.68rem; color: #7c3aed; margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: #7c3aed;
+    margin-bottom: 8px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-#Session State 
+# session state init
 for key, val in {
     "messages": [], "vectordb_loaded": False,
     "index": None, "chunks": None, "num_chunks": 0
@@ -147,8 +305,9 @@ for key, val in {
     if key not in st.session_state:
         st.session_state[key] = val
 
-
+# sidebar
 with st.sidebar:
+
     st.markdown("""
     <div class="logo-area">
         <div class="logo-title">DocMind AI</div>
@@ -193,6 +352,7 @@ with st.sidebar:
                     st.error(f"❌ {str(e)}")
 
     st.markdown('<div class="sidebar-label">📊 Index Stats</div>', unsafe_allow_html=True)
+
     if st.session_state.vectordb_loaded:
         st.markdown('<div class="status-ready">● Vector DB Ready</div>', unsafe_allow_html=True)
         st.markdown("<br>", unsafe_allow_html=True)
@@ -205,7 +365,7 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
 
-
+# main chat area
 st.markdown("""
 <div class="main-header">
     <div class="main-title">Ask your documents.</div>
@@ -213,6 +373,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Empty state
 if not st.session_state.messages:
     st.markdown("""
     <div class="empty-state">
@@ -222,17 +383,19 @@ if not st.session_state.messages:
     </div>
     """, unsafe_allow_html=True)
 
+# Chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
         if message["role"] == "assistant" and "sources" in message:
             with st.expander("📎 VIEW SOURCE CHUNKS"):
                 for i, src in enumerate(message["sources"]):
-                    st.markdown(f'<div class="source-chip">◆ SOURCE {i+1} · CHUNK #{src["chunk_id"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="source-chip">◆ SOURCE {i+1} &nbsp;·&nbsp; CHUNK #{src["chunk_id"]}</div>', unsafe_allow_html=True)
                     st.caption(src["text"][:350] + "..." if len(src["text"]) > 350 else src["text"])
                     if i < len(message["sources"]) - 1:
                         st.divider()
 
+# Chat input
 if prompt := st.chat_input("Ask anything about your document..."):
     if not st.session_state.vectordb_loaded:
         st.warning("⚠️ Please upload and process a document first!")
@@ -246,7 +409,9 @@ if prompt := st.chat_input("Ask anything about your document..."):
         from src.retriever import retrieve_relevant_chunks, format_context
         from src.generator import generate_streaming_response
 
-        retrieved = retrieve_relevant_chunks(prompt, st.session_state.index, st.session_state.chunks)
+        retrieved = retrieve_relevant_chunks(
+            prompt, st.session_state.index, st.session_state.chunks
+        )
         context = format_context(retrieved)
 
         placeholder = st.empty()
@@ -262,7 +427,7 @@ if prompt := st.chat_input("Ask anything about your document..."):
 
         with st.expander("📎 VIEW SOURCE CHUNKS"):
             for i, src in enumerate(retrieved):
-                st.markdown(f'<div class="source-chip">◆ SOURCE {i+1} · CHUNK #{src["chunk_id"]}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="source-chip">◆ SOURCE {i+1} &nbsp;·&nbsp; CHUNK #{src["chunk_id"]}</div>', unsafe_allow_html=True)
                 st.caption(src["text"][:350] + "..." if len(src["text"]) > 350 else src["text"])
                 if i < len(retrieved) - 1:
                     st.divider()
