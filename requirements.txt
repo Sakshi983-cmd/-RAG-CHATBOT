@@ -1,6 +1,6 @@
 streamlit
 groq
-sentence-transformers
+sentence-transformers==2.7.0
 faiss-cpu>=1.13.0
 python-dotenv
 pypdf
