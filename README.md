@@ -60,7 +60,7 @@ class SakshiAIEngineer:
 <br/>
 
 ### 🔴 [LIVE APP → nhvb3mmj3ngfnosel4f9hf.streamlit.app](https://nhvb3mmj3ngfnosel4f9hf.streamlit.app/)
-VIDEO LINK - https://www.loom.com/share/cab420b56f9b48d5adad2d0c1664db6c?t=66
+Gif - https://www.loom.com/share/cab420b56f9b48d5adad2d0c1664db6c?t=66
 
 </div>
 
