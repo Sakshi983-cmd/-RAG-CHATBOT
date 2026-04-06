@@ -303,4 +303,4 @@ Lower temperature reduces creativity and increases factual consistency — criti
 
 </div>
 <!-- Featured Project -->
-## 🚀 Featured Project — DocMind AI
+
