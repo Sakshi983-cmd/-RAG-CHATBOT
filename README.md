@@ -297,7 +297,7 @@ Lower temperature reduces creativity and increases factual consistency — criti
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer&text=Built%20for%20Amlgo%20Labs%20%F0%9F%9A%80&fontSize=24&fontColor=fff&fontAlignY=65"/>
 
-**Made with ❤️ by Sakshi | Amlgo Labs Junior AI Engineer Assignment 2025**
+**Made with ❤️ by Sakshi |  Junior AI Engineer **
 
 ⭐ Star this repo if you found it useful!
 
